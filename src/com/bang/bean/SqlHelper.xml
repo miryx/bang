@@ -3,8 +3,9 @@
     "-//mybatis.org//DTD Mapper 3.0//EN"  
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
 <mapper namespace="com.bang.bean.SqlHelper">
-	<select id="selectProc" statementType="CALLABLE">  
+	<select id="selectProc" statementType="CALLABLE" resultType="java.util.Map">  
    		{call ${proc}
+   		<if test="values!=null and values.size!=1">
 		<foreach collection="values" item="item" index="index" separator="," open="(" close=")">
 		 	<choose>
 		  	 <when test="item.type=='CURSOR' and item.mode=='OUT'">
@@ -18,10 +19,14 @@
 		  	 </otherwise>
 		  </choose>
     	</foreach>
+    	</if>
 		}
  	</select>
     <select id="selectSql" parameterType="String" resultType="java.util.Map">
     	${_parameter}
+    </select>
+    <select id="getID" parameterType="String" resultType="String">
+    	select fun_getid(#{_parameter}) from dual
     </select>
     <update id="updateSql" parameterType="String">
     	${_parameter}

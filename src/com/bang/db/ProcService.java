@@ -134,27 +134,30 @@ public class ProcService {
 		}
 		param = new HashMap<String, Object>();
 		param.put("proc",proc.getString("PROC"));
-		JSONArray js= proc.getJSONArray("PARAM");
-		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
-		for(int i=0;i<js.size();i++){
-			Map<String, Object> map = new HashMap<String, Object>();
-			proc = (JSONObject)js.get(i);
-			map.put("mode", proc.get("MODE"));
-			if("OUT".equals(proc.get("MODE"))){
-				outter.add(proc.get("PARAM")+"");
-				map.put("value", proc.get("PARAM"));
-			}else{
-				for(Object key:values.keySet()){
-					if(key.toString().equals(proc.get("PARAM"))){
-						map.put("value", values.get(key));
-						break;
+		if(proc.has("PARAM")){
+			JSONArray js= proc.getJSONArray("PARAM");
+			List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+			for(int i=0;i<js.size();i++){
+				Map<String, Object> map = new HashMap<String, Object>();
+				proc = (JSONObject)js.get(i);
+				map.put("mode", proc.get("MODE"));
+				if("OUT".equals(proc.get("MODE"))){
+					outter.add(proc.get("PARAM")+"");
+					map.put("value", proc.get("PARAM"));
+				}else{
+					for(Object key:values.keySet()){
+						if(key.toString().equals(proc.get("PARAM"))){
+							map.put("value", values.get(key));
+							break;
+						}
 					}
 				}
+				map.put("type", proc.get("TYPE"));
+				list.add(map);
 			}
-			map.put("type", proc.get("TYPE"));
-			list.add(map);
+
+			param.put("values", list);
 		}
-		param.put("values", list);
 	}
 
 	/**
@@ -173,14 +176,15 @@ public class ProcService {
 		//格式匹配
 		if(PATTERN_PROC.matcher(procstr).find()){
 			if(procstr.split("\\(").length==2&&procstr.endsWith(")")){
-				if(procstr.split("\\(")[1].split("\\)").length>0){
-					procstr = procstr.substring(0, procstr.length()-1);
-					String[] proc = procstr.split("\\(");
-					json = new JSONObject();
-					if(proc[0].trim().indexOf(" ")==-1)
-						json.put("PROC", proc[0].trim());
-					else throw new Exception(proc[0]+"存储过程名中不能包含空格字符");
-					Pattern p=Pattern.compile("\\s+");
+				//if(procstr.split("\\(")[1].split("\\)").length>0){
+				procstr = procstr.substring(0, procstr.length()-1);
+				String[] proc = procstr.split("\\(");
+				json = new JSONObject();
+				if(proc[0].trim().indexOf(" ")==-1)
+					json.put("PROC", proc[0].trim());
+				else throw new Exception(proc[0]+"存储过程名中不能包含空格字符");
+				Pattern p=Pattern.compile("\\s+");
+				if(proc.length>1){
 					Matcher m=p.matcher(proc[1].trim());
 					String [] params = m.replaceAll(" ").split(",");
 					String[] item = null;
@@ -201,7 +205,8 @@ public class ProcService {
 						json.put("PARAM", js);
 					}else throw new Exception("参数错误");
 				}
-				else throw new Exception("没有参数，存储过程");
+				//}
+				//else throw new Exception("没有参数，存储过程");
 			}
 			else throw new Exception("不符合格式要求，存储过程");
 		}
