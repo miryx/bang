@@ -10,6 +10,7 @@ public class B_test {
 	public static void main(String[] args) {
 		B_test btest=new B_test ();
 		btest.getName();
+        System.out.println("-----------jajja");
 		System.out.println("skdjhkcdskjhnjdkscnjk");
 		System.out.println("sdjcn");
 	}
