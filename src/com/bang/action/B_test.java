@@ -6,6 +6,7 @@ public class B_test {
 		System.out.print("xxxxxxxxxx");
 		System.out.print("xxxxxxxxxx");
 		System.out.print("xxxxxxxxxx");
+		System.out.print("jbikjnknk");
 	}
 
 }
