@@ -13,6 +13,12 @@ public class B_test {
         System.out.println("-----------jajja");
 		System.out.println("skdjhkcdskjhnjdkscnjk");
 		System.out.println("sdjcn");
+		System.out.print("xxxxxxxxxx");
+		System.out.print("xxxxxxxxxx");
+		System.out.print("xxxxxxxxxx");
+		System.out.print("xxxxxxxxxx");
+		System.out.print("xxxxxxxxxx");
+		System.out.print("xiugai");
 	}
 
 }
