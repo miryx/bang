@@ -7,7 +7,7 @@ public class B_test {
 		System.out.print("xxxxxxxxxx");
 		System.out.print("sasdasd");
 		System.out.print("sadasdasda");
-		System.out.print("xxxxxxxxxx");
+		System.out.print("saiuo");
 		System.out.print("xiugai");
 	}
 
