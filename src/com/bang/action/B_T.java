@@ -6,5 +6,7 @@ public class B_T {
 		System.out.println("........");
 		System.out.println("........");
 		System.out.println("........");
+		System.out.println("........");
+		System.out.println("........");
 	}
 }
