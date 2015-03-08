@@ -651,3 +651,25 @@ org.apache.ibatis.exceptions.PersistenceException:
 2015-03-05 23:56:17 JakartaCommonsLoggingImpl.java DEBUG ==>  Executing: {call proc_test ( ? , ? , ? ) } 
 2015-03-05 23:56:17 JakartaCommonsLoggingImpl.java DEBUG ==> Parameters: u_type(String)
 2015-03-05 23:56:17 JakartaCommonsLoggingImpl.java DEBUG Returned connection 1292770722 to pool.
+2015-03-08 19:58:35 JakartaCommonsLoggingImpl.java DEBUG Logging initialized using 'org.apache.ibatis.logging.commons.JakartaCommonsLoggingImpl' adapter.
+2015-03-08 19:58:35 JakartaCommonsLoggingImpl.java DEBUG PooledDataSource forcefully closed/removed all connections.
+2015-03-08 19:58:35 JakartaCommonsLoggingImpl.java DEBUG PooledDataSource forcefully closed/removed all connections.
+2015-03-08 19:58:35 JakartaCommonsLoggingImpl.java DEBUG PooledDataSource forcefully closed/removed all connections.
+2015-03-08 19:58:35 JakartaCommonsLoggingImpl.java DEBUG PooledDataSource forcefully closed/removed all connections.
+2015-03-08 19:58:35 JakartaCommonsLoggingImpl.java DEBUG Created connection 830078297.
+2015-03-08 19:58:35 JakartaCommonsLoggingImpl.java DEBUG ooo Connection Opened
+2015-03-08 19:58:35 JakartaCommonsLoggingImpl.java DEBUG ==>  Executing: {call proc_test ( ? , ? , ? ) } 
+2015-03-08 19:58:35 JakartaCommonsLoggingImpl.java DEBUG ==> Parameters: u_type(String)
+2015-03-08 19:58:35 JakartaCommonsLoggingImpl.java DEBUG Returned connection 830078297 to pool.
+2015-03-08 19:58:45 JakartaCommonsLoggingImpl.java DEBUG Logging initialized using 'org.apache.ibatis.logging.commons.JakartaCommonsLoggingImpl' adapter.
+2015-03-08 19:58:46 JakartaCommonsLoggingImpl.java DEBUG PooledDataSource forcefully closed/removed all connections.
+2015-03-08 19:58:46 JakartaCommonsLoggingImpl.java DEBUG PooledDataSource forcefully closed/removed all connections.
+2015-03-08 19:58:46 JakartaCommonsLoggingImpl.java DEBUG PooledDataSource forcefully closed/removed all connections.
+2015-03-08 19:58:46 JakartaCommonsLoggingImpl.java DEBUG PooledDataSource forcefully closed/removed all connections.
+2015-03-08 19:58:46 JakartaCommonsLoggingImpl.java DEBUG Created connection 1815981756.
+2015-03-08 19:58:46 JakartaCommonsLoggingImpl.java DEBUG ooo Connection Opened
+2015-03-08 19:58:46 JakartaCommonsLoggingImpl.java DEBUG ==>  Executing: {call proc_test1 } 
+2015-03-08 19:58:46 JakartaCommonsLoggingImpl.java DEBUG ==> Parameters: 
+2015-03-08 19:58:46 JakartaCommonsLoggingImpl.java DEBUG <==    Columns: a, b
+2015-03-08 19:58:46 JakartaCommonsLoggingImpl.java DEBUG <==        Row: as, sad
+2015-03-08 19:58:46 JakartaCommonsLoggingImpl.java DEBUG Returned connection 1815981756 to pool.

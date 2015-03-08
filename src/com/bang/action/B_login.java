@@ -30,7 +30,7 @@ public class B_login extends BWSService {
 		ProcService pService = new ProcService();
 		try {
 			pService.setProc("proc_test(arg in varchar,arg2 out varchar,arga out varchar)");
-			//pService.setProc("proc_test1()");
+			pService.setProc("proc_test1()");
 			pService.setProcValue(new HashMap<String, Object>(){
 				private static final long serialVersionUID = 390311903713378782L;
 				{
