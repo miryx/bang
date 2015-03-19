@@ -7,9 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import net.sf.json.JSONArray;
-
 import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
 
@@ -67,7 +64,8 @@ public class CommonDao {
 	
 	@SuppressWarnings("unchecked")
 	private static void dealList(Map<String, Object> callporc,List<Map<String, Object>> objList){
-		callporc.put("cursor", JSONArray.fromObject(objList));
+		if(objList!=null&&objList.size()>0)
+			callporc.put("cursor", objList);
 		if(callporc.get("values")!=null)
 			for(Map<String, Object> i:(List<Map<String, Object>>)callporc.get("values")){
 				if("OUT".equals(i.get("mode"))){

@@ -15,9 +15,15 @@ public class B_test {
 		System.out.println("sdjcn");
 		System.out.print("xxxxxxxxxx");
 		System.out.print("xxxxxxxxxx");
+
 		System.out.print("xxxxxxxxxx");
 		System.out.print("xxxxxxxxxx");
 		System.out.print("xxxxxxxxxx");
+		System.out.print("xiugai");
+
+		System.out.print("sasdasd");
+		System.out.print("sadasdasda");
+		System.out.print("saiuo");
 		System.out.print("xiugai");
 	}
 
