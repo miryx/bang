@@ -6,7 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.management.RuntimeErrorException;
+
 import org.apache.ibatis.type.JdbcType;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -63,13 +67,13 @@ public class ProcService {
 	 * "proc_gs_testclob( in_param in VARCHAR,out_j out CLOB,out_p out CLOB, out_p out DATE,out_z out cursor)";
 	 * @throws Exception 
 	 * */
-	public void setProc(String procstr) throws Exception {
+	public void setProc(String procstr) {
 		if(procstr==null&&"".equals(procstr))
 			return ;
 		try {
 			this.proc = getProcJson(procstr);
 		} catch (Exception e) {
-			throw new Exception(procstr+"存储调用发生错误："+e.getMessage(),e);
+			throw new RuntimeException(procstr+"存储调用发生错误："+e.getMessage(),e);
 		}
 	}
 	/**
@@ -98,7 +102,7 @@ public class ProcService {
 	 * @return 封装好的参数集 可作为 CommonDao.excuteProc(caller) 的参数
 	 * @throws Exception 
 	 * */
-	public Map<String, Object> getProcMap(JSONObject values,String procstr) throws Exception{
+	public Map<String, Object> getProcMap(JSONObject values,String procstr) {
 		this.values= values;
 		this.setProc(procstr);
 		this.exceteProcMap();
@@ -111,7 +115,7 @@ public class ProcService {
 	 * @return 封装好的参数集 可作为 CommonDao.excuteProc(caller)的参数
 	 * @throws Exception 
 	 * */
-	public Map<String, Object> getProcMap(Map<String, Object> params,String procstr) throws Exception{
+	public Map<String, Object> getProcMap(Map<String, Object> params,String procstr) {
 		this.setProcValue(params);
 		this.setProc(procstr);
 		this.exceteProcMap();
@@ -165,61 +169,57 @@ public class ProcService {
 	 * @author tonsr
 	 * @createdate 2014-11-20
 	 * @param procstr proc_gs_aas(asa IN VARCHAR)
-	 * @return {"PROC":"PROC_GS_AAS","PARAM":[{"PARAM":"ASA","MODE":"IN","TYPE":"VARCHAR"}]}
+	 * @return {"PROC":"PROC_GS_AAS","PARAM":[{"PARAM":"aas","MODE":"IN","TYPE":"VARCHAR"}]}
 	 * asa IN VARCHAR 多组数据用逗号分隔
 	 * asa 为参数名 IN 入参，OUT 出参，VARCHAR 参考MyBatis JDBCTYPE 
 	 * */
-	private static JSONObject getProcJson(String procstr) throws Exception {
+	private static JSONObject getProcJson(String procstr) {
 		JSONObject json = null;
 		JSONArray js = null;
 		procstr = procstr.trim();
 		//格式匹配
 		if(PATTERN_PROC.matcher(procstr).find()){
 			if(procstr.split("\\(").length==2&&procstr.endsWith(")")){
-				//if(procstr.split("\\(")[1].split("\\)").length>0){
-				procstr = procstr.substring(0, procstr.length()-1);
-				String[] proc = procstr.split("\\(");
-				json = new JSONObject();
-				if(proc[0].trim().indexOf(" ")==-1)
-					json.put("PROC", proc[0].trim());
-				else throw new Exception(proc[0]+"存储过程名中不能包含空格字符");
-				Pattern p=Pattern.compile("\\s+");
-				if(proc.length>1){
-					Matcher m=p.matcher(proc[1].trim());
-					String [] params = m.replaceAll(" ").split(",");
-					String[] item = null;
-					if(params.length>0){
-						js = new JSONArray();
-						for(String param:params){
-							if(param.trim().split(" ").length==3){
-								item = param.trim().split(" ");
-								JSONObject paramitem = new JSONObject();
-								paramitem.put("PARAM", item[0]);
-								if("IN".equals(item[1].toUpperCase())||"OUT".equals(item[1].toUpperCase()))
-									paramitem.put("MODE", item[1].toUpperCase());
-								else throw new Exception(item[1]+" MODE 类型只能为 IN 或 OUT");
-								paramitem.put("TYPE", getJdbcType(item[2]));
-								js.add(paramitem);
+					procstr = procstr.substring(0, procstr.length()-1);
+					String[] proc = procstr.split("\\(");
+					json = new JSONObject();
+					if(proc[0].trim().indexOf(" ")==-1)
+						json.put("PROC", proc[0].trim());
+					else throw new RuntimeException(proc[0]+"存储过程名中不能包含空格字符");
+					if(proc.length>1){
+						Pattern p=Pattern.compile("\\s+");
+						Matcher m=p.matcher(proc[1].trim());
+						String [] params = m.replaceAll(" ").split(",");
+						String[] item = null;
+						if(params.length>0){
+							js = new JSONArray();
+							for(String param:params){
+								if(param.trim().split(" ").length==3){
+									item = param.trim().split(" ");
+									JSONObject paramitem = new JSONObject();
+									paramitem.put("PARAM", item[0]);
+									if("IN".equals(item[1].toUpperCase())||"OUT".equals(item[1].toUpperCase()))
+										paramitem.put("MODE", item[1].toUpperCase());
+									else throw new RuntimeException(item[1]+" MODE 类型只能为 IN 或 OUT");
+									paramitem.put("TYPE", getJdbcType(item[2]));
+									js.add(paramitem);
+								}
 							}
-						}
-						json.put("PARAM", js);
-					}else throw new Exception("参数错误");
-				}
-				//}
-				//else throw new Exception("没有参数，存储过程");
+							json.put("PARAM", js);
+						}else throw new RuntimeException("参数错误");
+					}
 			}
-			else throw new Exception("不符合格式要求，存储过程");
+			else throw new RuntimeException("不支持无参存储过程调用");
 		}
-		else throw new Exception("不支持无参存储过程调用，存储过程");
+		else throw new RuntimeException("存储过程内容标记不符合格式要求");
 		return json;
 	}
-
 	/**
 	 * 通过proc的声明类型获取jdbc转换的类型
 	 * */
-	private static String getJdbcType(String type) throws Exception {
+	private static String getJdbcType(String type) {
 		if("blob".equals(type.toLowerCase())){
-			throw new Exception(type+"类型是不能被支持的数据类型...");
+			throw new RuntimeException(type+"类型是不能被支持的数据类型...");
 		}
 		for(JdbcType jdb:JdbcType.values()){
 			if(jdb.toString().equals(type.toUpperCase())){
@@ -231,7 +231,7 @@ public class ProcService {
 		}else if ("varchar2".equals(type.toLowerCase())) {
 			return "VARCHAR";
 		}
-		throw new Exception("程序未考虑到的情况发生了，因为存储过程中存在未能识别的类型"+type+"，请在ProcService下getJdbcType中添加对应的转换类型");
+		throw new RuntimeException("程序未考虑到的情况发生了，因为存储过程中存在未能识别的类型"+type+"，请在ProcService下getJdbcType中添加对应的转换类型");
 	}
 
 }
